@@ -1,0 +1,31 @@
+{% extends "shops/shop_base.html" %}
+
+{% block preshop %}
+<h1>shop name: {{shop}}</h1>
+<h2>shop description : {{shop.description}}</h2>
+<h3>number of reviews: {{shop.get_number_of_reviews}}</h3>
+<h4>rating: {{shop.get_cumulative_review}}</h4>
+{% endblock %}
+
+
+{% block shop_content %}
+
+<div class="col-md-8">
+	{% if shop.review_st.all == 0 %}
+	<h2>No reviews on this shop yet!</h2>
+
+	{% else %}
+		<h2>Reviews:</h2>
+		<ul>
+			{% for review in shop.review_set.all %}
+				<li>{{review}} <b> rating : {{review.rating}} stars</b> by <a href="{% url 'accounts:user-profile' pk=review.reviewer.pk %}">{{review.reviewer}}</a>  </li>
+
+			{% endfor %}
+
+		</ul>
+		<button type="button" name="button"><a href="{% url 'shops:review-shop' pk=shop.get_absolute_url %}">Write a review</a></button>
+
+
+	{% endif %}
+</div>
+{% endblock %}
