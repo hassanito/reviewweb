@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'accounts',
     'shops',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,10 @@ LOGOUT_REDIRECT_URL = "thanks"
 # the media root is saved on the file system not on the database
 MEDIA_ROOT =  os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'hassanitohajj@gmail.com'
+EMAIL_HOST_PASSWORD = 'kunqwasaksxjptbg'
