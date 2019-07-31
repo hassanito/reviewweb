@@ -11,6 +11,15 @@ from django.http import HttpResponseRedirect
 import operator
 
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.models import User
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 
 class ListShops(generic.ListView):
     model = Shop
@@ -25,9 +34,15 @@ class ListShops(generic.ListView):
         else:
             object_list = Shop.objects.all()
             return object_list
-
+    order_by ="-created_at"
 class ShopDetail(generic.DetailView):
     model = Shop
+    def get_context_data(self, *args, **kwargs):
+        context = super(ShopDetail, self).get_context_data(*args, **kwargs)
+        context['review_list'] = Review.objects.filter(reviewed_shop = self.get_object()).order_by('-created_at')
+        return context
+
+
 from django.contrib.auth.decorators import login_required
 
 
@@ -35,8 +50,6 @@ from django.contrib.auth.decorators import login_required
 def review_create_view(request,pk):
 
     value = request.POST.get('rating')
-    print("helloooooooooooooooooooooooooooooooooooooo")
-    print(value)
     shop = get_object_or_404(Shop,pk=pk)
     form = ReviewForm(request.POST or None)
     if form.is_valid():
@@ -55,3 +68,40 @@ def review_create_view(request,pk):
         'form': form
     }
     return render(request,'shops/review_create.html',context)
+
+# class ReviewEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = Review
+#     fields = ['description','rating']
+#     value = request.POST.get('rating')
+#     success_url = reverse_lazy('shops:all')
+#
+#     def form_valid(self, form):
+#         form.instance.reviewer = self.request.user
+#         return super().form_valid(form)
+#
+#     def test_func(self):
+#         review = self.get_object()
+#         if self.request.user == review.reviewer:
+#             return True
+#         return False
+
+class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Review
+
+    def test_func(self):
+        review = self.get_object()
+        pk = review.reviewed_shop.id
+        if self.request.user == review.reviewer:
+
+            return True
+        return False
+    def delete(self, request, *args, **kwargs):
+        """
+        Call the delete() method on the fetched object and then redirect to the
+        success URL.
+        """
+        self.object = self.get_object()
+        pk = self.get_object().reviewed_shop.id
+        success_url = reverse_lazy('shops:shop-detail',args=[pk])
+        self.object.delete()
+        return HttpResponseRedirect(success_url)

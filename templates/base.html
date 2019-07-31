@@ -26,17 +26,38 @@
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
           </button>
+            <form class="form-inline mx-auto" method="GET" action="{% url 'shops:all' %}">
+              <div  class="md-form my-0">
+                <input class="form-control" aria-label="Search" name='q' type="text" placeholder="Search posts">
+                <input class="btn btn-outline-white btn-md my-0 ml-sm-2" type="submit" value="Search">
+
+              </div>
+            </form>
+
           <div class="collapse navbar-collapse" id="navbarToggle">
-            <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="#">About</a>
+            <div class="navbar-nav mx-auto">
+              <!-- <a class="nav-item nav-link" href="#">About</a> -->
+
             </div>
+
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
+              <!-- Search form -->
+              <!-- <form method="GET" action="{% url 'shops:all' %}">
+                <input name='q' type="text" placeholder="Search posts">
+                <input type="submit" value="Search">
+              </form> -->
+
+
                 <a class="nav-item nav-link" href="{% url 'shops:all' %}">Shops</a>
                 <a class="nav-item nav-link" href="{% url 'accounts:user-detail' %}">Profile</a>
                 <a class="nav-item nav-link" href="{% url 'accounts:logout' %}">Logout</a>
               {% else %}
+              <!-- Search form -->
+              
+
+                <a class="nav-item nav-link" href="{% url 'shops:all' %}">Shops</a>
                 <a class="nav-item nav-link" href="{% url 'accounts:login' %}">Login</a>
                 <a class="nav-item nav-link" href="{% url 'accounts:signup' %}">Register</a>
               {% endif %}

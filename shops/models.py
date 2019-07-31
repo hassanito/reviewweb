@@ -15,7 +15,7 @@ class Shop(models.Model):
     description = models.TextField(max_length=200)
     number_of_reviews =0
     cumulative = 0
-    image = models.ImageField(upload_to='profile_image',blank=True)
+    image = models.ImageField(upload_to='profile_image',default='default.jpg' ,blank=False)
     def __str__(self):
         return self.handle
 
@@ -25,7 +25,6 @@ class Shop(models.Model):
     def get_number_of_reviews(self):
         number = Review.objects.filter(reviewed_shop = self ).count()
         self.number_of_reviews= number
-        print(number)
         return str(number)
     def get_cumulative_review(self):
         reviews = Review.objects.filter(reviewed_shop=self)
@@ -34,7 +33,7 @@ class Shop(models.Model):
         for i in reviews:
             cumulative += i.rating
         if(number!=0):
-            print(cumulative/number)
+
             # truncate to 1 decimal number
             return '%.1f'%(cumulative/number)
         else:
@@ -45,7 +44,7 @@ class Review(models.Model):
     reviewed_shop = models.ForeignKey(Shop,on_delete=models.CASCADE)
     description = models.TextField(max_length=200)
     rating = models.IntegerField(default=0)
-
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.description
 

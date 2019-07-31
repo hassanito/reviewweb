@@ -19,9 +19,30 @@
     </div>
     <ul>
 
-      {% for review in reviews %}
-        <li>{{review}} on <a href="{% url 'shops:shop-detail' pk=review.reviewed_shop.pk %}">{{review.reviewed_shop}}</a></li>
-      {% endfor %}
+      <ul>
+
+        {% for review in user.review_set.all %}
+              <!-- <li>{{review}} <b> rating : {{review.rating}} stars</b> by <a href="{% url 'accounts:user-profile' pk=review.reviewer.pk %}">{{review.reviewer}}</a>  </li> -->
+          <div class="col-md-10">
+            <article class="media content-section">
+              <img class="rounded-circle article-img" src="{{ review.reviewer.profile.image.url }}" >
+              <div class="media-body">
+                <div class="article-metadata">
+                  <!-- <a class="mr-2" href="#">by reviewer</a> -->
+                  <!-- <small class="text-muted">number of reviews : {{ shop.get_number_of_reviews }}</small> -->
+
+                  <h4><a href="{% url 'shops:shop-detail' review.reviewed_shop.id %}">{{ review.reviewed_shop }} </a> was rated {{ review.rating}} stars by <a class="mr-2" href="{% url 'accounts:user-profile' pk=review.reviewer.pk %}">{{review.reviewer}}</a></h4>
+
+                 </div>
+                 <p style="font-size:130%;" class="article-content"> {{ review }} </p>
+                 
+              </div>
+            </article>
+
+          </div>
+        {% endfor %}
+
+      </ul>
     </ul>
 
 </div>

@@ -110,3 +110,7 @@ a.article-title:hover {
 .star-rating :hover ~ label {
 	color: rgb(250, 176, 5);
 }
+.box{
+    width: 100%;
+    text-align:center;
+}
