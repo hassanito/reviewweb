@@ -1,0 +1,57 @@
+{% extends "shops/shop_base.html" %}
+
+{% block shop_content %}
+<div class="col-md-12">
+	<article class="media content-section">
+		<img class="rounded-circle article-img" src="{{ shop.image.url }}" alt="profile ">
+		<div class="media-body">
+			<div class="article-metadata">
+				<a class="mr-2" href="{{ shop.get_absolute_url }}">{{ shop }}</a>
+				<small class="text-muted">number of reviews : {{ shop.get_number_of_reviews }}</small>
+			</div>
+			<h2><a class="article-title" href="#">Reviews :{{shop.get_cumulative_review}}</a></h2>
+			<p class="article-content">Info : {{ shop.description }}</p>
+		</div>
+	</article>
+
+</div>
+<div class="col-md-12">
+	{% if shop.review_st.all == 0 %}
+	<h2>No reviews on this shop yet!</h2>
+
+	{% else %}
+		<h2>Reviews:</h2>
+		<ul>
+			{% for review in review_list %}
+						<!-- <li>{{review}} <b> rating : {{review.rating}} stars</b> by <a href="{% url 'accounts:user-profile' pk=review.reviewer.pk %}">{{review.reviewer}}</a>  </li> -->
+				<div class="col-md-12">
+					<article class="media content-section">
+						<img class="rounded-circle article-img" src="{{ review.reviewer.profile.image.url }}" >
+						<div class="media-body">
+							<div class="article-metadata">
+								<!-- <a class="mr-2" href="#">by reviewer</a> -->
+								<!-- <small class="text-muted">number of reviews : {{ shop.get_number_of_reviews }}</small> -->
+
+								<h4>Rated {{ review.rating}} stars by <a class="mr-2" href="{% url 'accounts:user-profile' pk=review.reviewer.pk %}">{{review.reviewer}}</a></h4>
+								<small>{{ review.created_at|date:"d/m/Y"  }}</small>
+							 </div>
+							 <p style="font-size:130%;" class="article-content">	{{ review }} </p>
+							 {% if review.reviewer == user %}
+								 <div>
+									 <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'shops:review-delete' review.id %}">Delete</a>
+								 </div>
+							 {% endif %}
+						</div>
+					</article>
+
+				</div>
+			{% endfor %}
+
+		</ul>
+		<button type="button" name="button"><a href="{% url 'shops:review-shop' pk=shop.get_absolute_url %}">Write a review</a></button>
+
+	{% endif %}
+</div>
+
+
+{% endblock %}

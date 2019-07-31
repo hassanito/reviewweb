@@ -39,12 +39,24 @@ class ShopDetail(generic.DetailView):
     model = Shop
     def get_context_data(self, *args, **kwargs):
         context = super(ShopDetail, self).get_context_data(*args, **kwargs)
-        context['review_list'] = Review.objects.filter(reviewed_shop = self.get_object()).order_by('-created_at')
+        context['review_list'] = Review.objects.filter(reviewed_shop = self.get_object())
         return context
 
+class ShopReviewsList(generic.ListView):
+    model = Shop
+    template_name ='shops/shops_reviews_list.html'
+    paginate_by =2
+    def get_context_data(self, *args, **kwargs):
+        context = super(ShopReviewsList, self).get_context_data(*args, **kwargs)
+        shop = get_object_or_404(Shop,pk=self.kwargs['pk'])
+        context['shop'] = shop
+        return context
+
+    def get_queryset(self,*args,**kwargs): # new
+        review_list =Review.objects.filter(reviewed_shop=self.kwargs['pk']).order_by("-created_at")
+        return review_list
 
 from django.contrib.auth.decorators import login_required
-
 
 @login_required(login_url='/accounts/login/')
 def review_create_view(request,pk):
