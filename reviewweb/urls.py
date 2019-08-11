@@ -26,6 +26,8 @@ urlpatterns = [
         path('accounts/',include('accounts.urls',namespace='accounts')),
         path('accounts/',include('django.contrib.auth.urls')),
         path('shops/',include('shops.urls',namespace='shops')),
+        path('ajax_calls/search/', views.autocompleteModel),
+
 ]
 from django.conf import settings
 from django.conf.urls.static import static
