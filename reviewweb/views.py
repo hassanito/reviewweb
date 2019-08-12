@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect,HttpResponse
 from django.views.generic import TemplateView
-from shops.models import Shop
+from shops.models import Shop,Comment,Review
 import json
 
 class TestPage(TemplateView):
@@ -77,3 +77,24 @@ def ajax_login(request):
             response_data['loggedin']= False
             print("login failed")
         return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+def comment(request):
+    print("yayyyyy")
+    response_data={}
+
+    if request.method=="POST":
+        print("user = ",request.user)
+        print("review id = ",request.POST.get('review_id'))
+        print("Text = ",request.POST.get('text'))
+        user = request.user
+        review_id = request.POST.get('review_id')
+        text = request.POST.get('text')
+        Comment.objects.create(
+            review = Review.objects.get(id=review_id),
+            author = user,
+            text = text
+        )
+        response_data['loggedin']= True
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")

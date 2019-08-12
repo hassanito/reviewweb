@@ -29,6 +29,7 @@ urlpatterns = [
         path('ajax_calls/search/', views.autocompleteModel),
         path('login/',views.ajax_login),
         path('oauth/', include('social_django.urls', namespace='social')),  # <--
+        path('comment/',views.comment,name='comment'),
 
 ]
 from django.conf import settings

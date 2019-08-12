@@ -202,10 +202,10 @@ aria-hidden="true">
          $("#modal-login").click(function(){
            console.log( $('#login_form').serialize())
            $.ajax({
-       type:"POST",
-       url: '/login/',
-       data: $('#login_form').serialize(),
-       success: function(response){
+             type:"POST",
+              url: '/login/',
+              data: $('#login_form').serialize(),
+              success: function(response){
            // do something with response
            console.log(response['loggedin'])
            if(response['loggedin']){
