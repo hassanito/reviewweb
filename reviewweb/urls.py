@@ -28,6 +28,8 @@ urlpatterns = [
         path('shops/',include('shops.urls',namespace='shops')),
         path('ajax_calls/search/', views.autocompleteModel),
         path('login/',views.ajax_login),
+        path('oauth/', include('social_django.urls', namespace='social')),  # <--
+
 ]
 from django.conf import settings
 from django.conf.urls.static import static

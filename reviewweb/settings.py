@@ -108,7 +108,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.open_id.OpenIdAuth',  # for Google authentication
+    'social_core.backends.google.GoogleOpenId',  # for Google authentication
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -125,6 +131,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '2442167632733934'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '1b232e5132fbd0e9359c89c488e2cd21'  # App Secret
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '41828262121-upq9if9rtpdt8pt653m9e3vt5reaps9k.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'chDtRkjI-ikGOUAf5N-TaJy0'
+
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]

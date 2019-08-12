@@ -36,6 +36,8 @@ aria-hidden="true">
         </div>
         <div class="container">
           <button type="button" name="button" id="modal-login">Submit</button>
+          <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
+          <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
 
         </div>
       </form>

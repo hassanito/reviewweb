@@ -19,6 +19,7 @@ class HomePage(TemplateView):
             return HttpResponseRedirect(reverse("test"))
         return super().get(request, *args, **kwargs)
 
+
 # the autocomplete function comes from https://medium.com/@ninajlu/django-ajax-jquery-search-autocomplete-d4b4bf6494dd
 def autocompleteModel(request):
     if request.is_ajax():
