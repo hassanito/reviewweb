@@ -40,8 +40,12 @@
 										    <div class="comment">
 										        <div class="date">{{ comment.created_date }}</div>
 										        <strong>{{ comment.author }}</strong>
+														{% if comment.author.id == review.reviewed_shop.shopowner_set.all.first.id %}
+														<font color="red">[Shop owner]</font>
+														{% endif%}
 										        <p>{{ comment.text|linebreaks }}</p>
 										    </div>
+
 										{% empty %}
 										    <p>No comments here yet :(</p>
 										{% endfor %}
