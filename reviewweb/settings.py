@@ -42,8 +42,7 @@ INSTALLED_APPS = [
     'accounts',
     'shops',
     'crispy_forms',
-    'bootstrap_modal_forms',
-
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'reviewweb.urls'
@@ -69,6 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',  # <--
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
