@@ -19,6 +19,28 @@
 	<h2>No reviews on this shop yet!</h2>
 
 	{% else %}
+	<form method="POST">
+		{% csrf_token %}
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Write your <!-- REVIEW:  --></label>
+		<div class="container">
+			<textarea class="form-control" id="review" rows="3"></textarea>
+		</div>
+		<div class="star-rating">
+			<input class ="star" type="radio" id="5-stars" name="rating" value="5" />
+			<label for="5-stars" class="star">&bigstar;</label>
+			<input class ="star" type="radio" id="4-stars" name="rating" value="4" />
+			<label for="4-stars" class="star">&bigstar;</label>
+			<input class ="star" type="radio" id="3-stars" name="rating" value="3" />
+			<label for="3-stars" class="star">&bigstar;</label>
+			<input class ="star" type="radio" id="2-stars" name="rating" value="2" />
+			<label for="2-stars" class="star">&bigstar;</label>
+			<input class ="star" type="radio" id="1-star" name="rating" value="1" />
+			<label for="1-star" class="star">&bigstar;</label>
+		</div>
+		<button type="button" name="button" id="review-button">Add review</button>
+  </div>
+</form>
 		<h2>Reviews:</h2>
 		<ul>
 			{% for review in review_list %}
@@ -52,7 +74,7 @@
 										<form  method="post">
 											{% csrf_token %}
 											 <input type="text" name="comment" id="input{{review.id}}">
-											 <button type="button" id="{{ review.id}}" name="button">Submit</button>
+											 <button type="button" class="reviewbutton" id="{{ review.id}}" name="button">Submit</button>
 
 										 </form>
 							 {% if review.reviewer == user %}
@@ -75,7 +97,7 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" /> <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"> </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-	$('button').on('click', function () {
+	$('.reviewbutton').on('click', function () {
 		console.log("yaaayyyy");
 		console.log($(this).attr('id'));
 		var reviewid =$(this).attr('id');
@@ -114,6 +136,47 @@
 
 	});
 	});
+	$('#review-button').click(function(){
+		console.log('you submitted a review');
+		var csrftoken = Cookies.get('csrftoken');
+		function csrfSafeMethod(method) {
+			// these HTTP methods do not require CSRF protection
+				return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+			}
+			$.ajaxSetup({
+			beforeSend: function(xhr, settings) {
+					if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+							xhr.setRequestHeader("X-CSRFToken", csrftoken);
+					}
+			}
+			});
+			var review_text = $("#review").val()
+			var reviewed_shop = {{ shop.id }}
+			var rating = $(".star:checked").val();
+
+			console.log(rating);
+			$.ajax({
+				type:"POST",
+				 url: '/review/',
+
+				 data: {
+							'review_text':review_text,
+							'reviewed_shop':reviewed_shop ,
+							'rating':rating,
+					},
+					dataType: 'json',
+					success: function(response){
+			 // do something with response
+			 console.log(response['loggedin'])
+			if(response['loggedin']){
+				location.href = ""
+				console.log("WORKS BITCH");
+			}
+
+			}
+
+	});
+		});
 
 	$('#comment-submit').click(function(){
 		console.log($('#comment-text').val());

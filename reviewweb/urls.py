@@ -30,6 +30,8 @@ urlpatterns = [
         path('login/',views.ajax_login),
         path('oauth/', include('social_django.urls', namespace='social')),  # <--
         path('comment/',views.comment,name='comment'),
+        path('review/',views.review_ajax,name='review_ajax'),
+
 
 ]
 from django.conf import settings
