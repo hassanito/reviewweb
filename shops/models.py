@@ -50,6 +50,15 @@ class Review(models.Model):
 
     def get_reviewer_pk(self):
         return reviewer.pk
+from django.utils import timezone
+class Comment(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User,on_delete=models.CASCADE)
+    text = models.TextField()
+    created_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.text
 
 class ReviewForm(ModelForm):
     class Meta:
