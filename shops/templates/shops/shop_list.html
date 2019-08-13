@@ -6,7 +6,14 @@
     <h1>Find and Review Online shops in Lebanon</h1>
   </div>
 </article>
+{% if object_list.count == 0 %}
+  <div class="container">
+    <h2>No Shops found </h2>
+  </div>
+{% endif %}
+
 {% for shop in object_list %}
+
 <div class="container">
   <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ shop.image.url }}">

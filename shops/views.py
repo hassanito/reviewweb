@@ -23,7 +23,7 @@ from django.views.generic import (
 
 class ListShops(generic.ListView):
     model = Shop
-
+    paginate_by =2
     def get_queryset(self): # new
         query = self.request.GET.get('q')
         if query:
