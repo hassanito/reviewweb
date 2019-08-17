@@ -33,6 +33,7 @@ urlpatterns = [
         path('review/',views.review_ajax,name='review_ajax'),
 
 
+
 ]
 from django.conf import settings
 from django.conf.urls.static import static

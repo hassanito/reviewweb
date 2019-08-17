@@ -60,6 +60,17 @@ class Comment(models.Model):
     def __str__(self):
         return self.text
 
+def get_image_filename(instance, filename):
+    title = instance.comment.review
+    slug = slugify(title)
+    return "comment_images/%s-%s" % (slug, filename)
+
+
+class Images(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=get_image_filename,
+                              verbose_name='Image')
+
 class ReviewForm(ModelForm):
     class Meta:
         model = Review

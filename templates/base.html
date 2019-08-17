@@ -155,17 +155,8 @@ aria-hidden="true">
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
     <script>
-        //
-        // $(document).ready(function(){
-        //     $("#batata").autocomplete({
-        //         source: "/ajax_calls/search/",
-        //         minLength: 2,
-        //         open: function(){
-        //             setTimeout(function () {
-        //                 $('.ui-autocomplete').css('z-index', 99);
-        //             }, 9999);
-        //         }
-        //       });
+
+
         //       $("#defaultForm-email").keyup(function(){
         //         console.log($(this).val());
         //       })
@@ -199,6 +190,18 @@ aria-hidden="true">
         //     });
         //
         // });
+        $(document).ready(function(){
+        $("#batata").autocomplete({
+
+            source: "/ajax_calls/search/",
+            minLength: 2,
+            open: function(){
+                setTimeout(function () {
+                    $('.ui-autocomplete').css('z-index', 99);
+                }, 9999);
+            }
+          });
+        });
          $("#modal-login").click(function(){
            console.log( $('#login_form').serialize())
            $.ajax({

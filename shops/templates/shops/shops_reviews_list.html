@@ -21,25 +21,35 @@
 	{% else %}
 	<form method="POST">
 		{% csrf_token %}
-  <div class="form-group">
-    <label for="exampleFormControlTextarea1">Write your <!-- REVIEW:  --></label>
-		<div class="container">
-			<textarea class="form-control" id="review" rows="3"></textarea>
+		{% if user.is_authenticated %}
+		<div class="form-group">
+			<label for="exampleFormControlTextarea1">Write your <!-- REVIEW:  --></label>
+			<div class="container">
+				<textarea class="form-control" id="review" rows="3"></textarea>
+			</div>
+			<div class="star-rating">
+				<input class ="star" type="radio" id="5-stars" name="rating" value="5" />
+				<label for="5-stars" class="star">&bigstar;</label>
+				<input class ="star" type="radio" id="4-stars" name="rating" value="4" />
+				<label for="4-stars" class="star">&bigstar;</label>
+				<input class ="star" type="radio" id="3-stars" name="rating" value="3" />
+				<label for="3-stars" class="star">&bigstar;</label>
+				<input class ="star" type="radio" id="2-stars" name="rating" value="2" />
+				<label for="2-stars" class="star">&bigstar;</label>
+				<input class ="star" type="radio" id="1-star" name="rating" value="1" />
+				<label for="1-star" class="star">&bigstar;</label>
+			</div>
+			<button type="button" name="button" id="review-button">Add review</button>
 		</div>
-		<div class="star-rating">
-			<input class ="star" type="radio" id="5-stars" name="rating" value="5" />
-			<label for="5-stars" class="star">&bigstar;</label>
-			<input class ="star" type="radio" id="4-stars" name="rating" value="4" />
-			<label for="4-stars" class="star">&bigstar;</label>
-			<input class ="star" type="radio" id="3-stars" name="rating" value="3" />
-			<label for="3-stars" class="star">&bigstar;</label>
-			<input class ="star" type="radio" id="2-stars" name="rating" value="2" />
-			<label for="2-stars" class="star">&bigstar;</label>
-			<input class ="star" type="radio" id="1-star" name="rating" value="1" />
-			<label for="1-star" class="star">&bigstar;</label>
-		</div>
-		<button type="button" name="button" id="review-button">Add review</button>
-  </div>
+		{% else %}
+			<div class="container">
+				<h2>Sign in to write a review</h2>
+
+				<button type="button" name="button" data-toggle="modal" data-target="#modalLoginForm">LOGIN</button>
+
+			</div>
+		{% endif %}
+
 </form>
 		<h2>Reviews:</h2>
 		<ul>
@@ -104,6 +114,12 @@
 		var id = '#input'+$(this).attr('id');
 		var text = $(id).val();
 		var csrftoken = Cookies.get('csrftoken');
+		var submit = true;
+		console.log(text);
+		if(text==""){
+			alert("write a comment first");
+			submit =false;
+		}
 		function csrfSafeMethod(method) {
 			// these HTTP methods do not require CSRF protection
 				return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -115,26 +131,29 @@
 					}
 			}
 			});
-			$.ajax({
-				type:"POST",
-				 url: '/comment/',
+			if(submit==true){
+				$.ajax({
+					type:"POST",
+					 url: '/comment/',
 
-				 data: {
-							'text':text,
-							'review_id':reviewid ,
-					},
-					dataType: 'json',
-					success: function(response){
-			 // do something with response
-			 console.log(response['loggedin'])
-			 if(response['loggedin']){
-				 location.href = ""
-				 console.log("WORKS BITCH");
-			 }
+					 data: {
+								'text':text,
+								'review_id':reviewid ,
+						},
+						dataType: 'json',
+						success: function(response){
+				 // do something with response
+				 console.log(response['loggedin'])
+				 if(response['loggedin']){
+					 location.href = ""
+					 console.log("WORKS BITCH");
+				 }
 
+				}
+
+		});
 			}
 
-	});
 	});
 	$('#review-button').click(function(){
 		console.log('you submitted a review');
@@ -153,37 +172,44 @@
 			var review_text = $("#review").val()
 			var reviewed_shop = {{ shop.id }}
 			var rating = $(".star:checked").val();
+			var submit = true;
+			if(review_text ==""){
+				alert("fill the text review");
+				submit =false;
+			}
+			if(rating==undefined ){
+				alert("fill the rating");
+				submit=false;
+			}
+			if(submit==true){
+				$.ajax({
+					type:"POST",
+					 url: '/review/',
 
-			console.log(rating);
-			$.ajax({
-				type:"POST",
-				 url: '/review/',
+					 data: {
+								'review_text':review_text,
+								'reviewed_shop':reviewed_shop ,
+								'rating':rating,
+						},
+						dataType: 'json',
+						success: function(response){
+				 // do something with response
+				 // console.log(response['loggedin'])
+				if(response['loggedin']){
+					location.href = ""
+					console.log("WORKS BITCH");
+				}
 
-				 data: {
-							'review_text':review_text,
-							'reviewed_shop':reviewed_shop ,
-							'rating':rating,
-					},
-					dataType: 'json',
-					success: function(response){
-			 // do something with response
-			 console.log(response['loggedin'])
-			if(response['loggedin']){
-				location.href = ""
-				console.log("WORKS BITCH");
+				}
+
+		});
 			}
 
-			}
-
-	});
 		});
 
 	$('#comment-submit').click(function(){
 		console.log($('#comment-text').val());
 		console.log($('#review-id').text());
-
-
 	});
-
 </script>
 {% endblock %}

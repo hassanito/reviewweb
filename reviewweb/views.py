@@ -98,7 +98,6 @@ def comment(request):
         response_data['loggedin']= True
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
-from shops.models import Review,Shop
 def review_ajax(request):
     response_data={}
     if request.method =='POST':
