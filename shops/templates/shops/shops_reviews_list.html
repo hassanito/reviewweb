@@ -1,5 +1,8 @@
+
 {% extends "shops/shop_base.html" %}
 {% block shop_content %}
+<!-- make the ajax requests -->
+
 <div class="col-md-12">
 	<article class="media content-section">
 		<img class="rounded-circle article-img" src="{{ shop.image.url }}" alt="profile ">
@@ -21,7 +24,6 @@
 	{% else %}
 	<form method="POST">
 		{% csrf_token %}
-		{% if user.is_authenticated %}
 		<div class="form-group">
 			<label for="exampleFormControlTextarea1">Write your <!-- REVIEW:  --></label>
 			<div class="container">
@@ -41,13 +43,13 @@
 			</div>
 			<button type="button" name="button" id="review-button">Add review</button>
 		</div>
+		{% if user.is_authenticated %}
 		{% else %}
-			<div class="container">
-				<h2>Sign in to write a review</h2>
-
-				<button type="button" name="button" data-toggle="modal" data-target="#modalLoginForm">LOGIN</button>
-
-			</div>
+				<script type="text/javascript">
+					$('#review').keyup(function(){
+						$('#modalLoginForm').modal();
+					});
+				</script>
 		{% endif %}
 
 </form>
@@ -78,12 +80,12 @@
 										        <p>{{ comment.text|linebreaks }}</p>
 										    </div>
 
-										{% empty %}
 										    <p>No comments here yet :(</p>
+												{% empty %}
 										{% endfor %}
 										<form  method="post">
 											{% csrf_token %}
-											 <input type="text" name="comment" id="input{{review.id}}">
+											 <input class="comment-input" type="text" name="comment" id="input{{review.id}}">
 											 <button type="button" class="reviewbutton" id="{{ review.id}}" name="button">Submit</button>
 
 										 </form>
@@ -92,10 +94,8 @@
 									 <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'shops:review-delete' review.id %}">Delete</a>
 								 </div>
 							 {% endif %}
-
 						</div>
 					</article>
-
 				</div>
 			{% endfor %}
 
@@ -104,56 +104,63 @@
 
 	{% endif %}
 </div>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" /> <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"> </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-	$('.reviewbutton').on('click', function () {
-		console.log("yaaayyyy");
-		console.log($(this).attr('id'));
-		var reviewid =$(this).attr('id');
-		var id = '#input'+$(this).attr('id');
-		var text = $(id).val();
-		var csrftoken = Cookies.get('csrftoken');
-		var submit = true;
-		console.log(text);
-		if(text==""){
-			alert("write a comment first");
-			submit =false;
-		}
-		function csrfSafeMethod(method) {
-			// these HTTP methods do not require CSRF protection
-				return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	<script type="text/javascript">
+		$('.reviewbutton').on('click', function () {
+			console.log("yaaayyyy");
+			console.log($(this).attr('id'));
+			var reviewid =$(this).attr('id');
+			var id = '#input'+$(this).attr('id');
+			var text = $(id).val();
+			var csrftoken = Cookies.get('csrftoken');
+			var submit = true;
+			console.log(text);
+			if(text==""){
+				alert("write a comment first");
+				submit =false;
 			}
-			$.ajaxSetup({
-			beforeSend: function(xhr, settings) {
-					if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-							xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			function csrfSafeMethod(method) {
+				// these HTTP methods do not require CSRF protection
+					return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+				}
+				$.ajaxSetup({
+				beforeSend: function(xhr, settings) {
+						if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+								xhr.setRequestHeader("X-CSRFToken", csrftoken);
+						}
+				}
+				});
+				if(submit==true){
+					$.ajax({
+						type:"POST",
+						 url: '/comment/',
+
+						 data: {
+									'text':text,
+									'review_id':reviewid ,
+							},
+							dataType: 'json',
+							success: function(response){
+					 // do something with response
+					 console.log(response['loggedin'])
+					 if(response['loggedin']){
+						 location.href = ""
+						 console.log("WORKS BITCH");
+					 }
+
 					}
-			}
+
 			});
-			if(submit==true){
-				$.ajax({
-					type:"POST",
-					 url: '/comment/',
-
-					 data: {
-								'text':text,
-								'review_id':reviewid ,
-						},
-						dataType: 'json',
-						success: function(response){
-				 // do something with response
-				 console.log(response['loggedin'])
-				 if(response['loggedin']){
-					 location.href = ""
-					 console.log("WORKS BITCH");
-				 }
-
 				}
 
 		});
-			}
+	</script>
 
+
+<script type="text/javascript">
+	$('.comment-input').keyup(function(){
+		console.log("batata");
+		$('#modalLoginForm').modal();
 	});
 	$('#review-button').click(function(){
 		console.log('you submitted a review');
