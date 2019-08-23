@@ -161,6 +161,9 @@ aria-hidden="true">
 
             source: "/ajax_calls/search/",
             minLength: 2,
+            select: function (event, ui) {
+            window.location = '/shops/'+ui.item.value;
+          },
             open: function(){
                 setTimeout(function () {
                     $('.ui-autocomplete').css('z-index', 99);

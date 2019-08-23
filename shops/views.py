@@ -20,6 +20,15 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+from shops.models import Shop
+def slug_test(request, foo):
+    print(foo)
+    shop = Shop.objects.filter(handle=foo).get()
+    url = shop.get_absolute_url()
+
+    print(shop.get_absolute_url())
+    return HttpResponseRedirect(reverse_lazy('shops:shop-detail',args=[shop.get_absolute_url()]))
+
 
 class ListShops(generic.ListView):
     model = Shop

@@ -28,10 +28,12 @@ def autocompleteModel(request):
         results = []
         for r in search_qs:
             results.append(r.handle)
+            results.append(r.get_absolute_url())
         data = json.dumps(results)
     else:
         data = 'fail'
     mimetype = 'application/json'
+    print(data)
     return HttpResponse(data, mimetype)
 
 from django.contrib.auth import authenticate

@@ -49,6 +49,10 @@
 					$('#review').keyup(function(){
 						$('#modalLoginForm').modal();
 					});
+					$('.comment-input').keyup(function(){
+						console.log("batata");
+						$('#modalLoginForm').modal();
+					});
 				</script>
 		{% endif %}
 
@@ -158,9 +162,55 @@
 
 
 <script type="text/javascript">
-	$('.comment-input').keyup(function(){
-		console.log("batata");
-		$('#modalLoginForm').modal();
+	$('.reviewbutton').on('click', function () {
+
+		console.log("yaaayyyy");
+		alert('boom')
+		console.log($(this).attr('id'));
+		var reviewid =$(this).attr('id');
+		var id = '#input'+$(this).attr('id');
+		var text = $(id).val();
+		var csrftoken = Cookies.get('csrftoken');
+		var submit = true;
+		console.log(text);
+		if(text==""){
+			alert("write a comment first");
+			submit =false;
+		}
+		function csrfSafeMethod(method) {
+			// these HTTP methods do not require CSRF protection
+				return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+			}
+			$.ajaxSetup({
+			beforeSend: function(xhr, settings) {
+					if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+							xhr.setRequestHeader("X-CSRFToken", csrftoken);
+					}
+			}
+			});
+			if(submit==true){
+				$.ajax({
+					type:"POST",
+					 url: '/comment/',
+
+					 data: {
+								'text':text,
+								'review_id':reviewid ,
+						},
+						dataType: 'json',
+						success: function(response){
+				 // do something with response
+				 console.log(response['loggedin'])
+				 if(response['loggedin']){
+					 location.href = ""
+					 console.log("WORKS BITCH");
+				 }
+
+				}
+
+		});
+			}
+
 	});
 	$('#review-button').click(function(){
 		console.log('you submitted a review');
