@@ -22,34 +22,98 @@
     {% else %}
         <title>Django Blog</title>
     {% endif %}
+    <style type="text/css">
+	.login-form {
+		width: 340px;
+    	margin: 30px auto;
+	}
+    .login-form form {
+    	margin-bottom: 15px;
+        background: #f7f7f7;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+    .login-form h2 {
+        margin: 0 0 15px;
+    }
+    .login-form .hint-text {
+		color: #777;
+		padding-bottom: 15px;
+		text-align: center;
+    }
+    .form-control, .btn {
+        min-height: 38px;
+        border-radius: 2px;
+    }
+    .login-btn {
+        font-size: 15px;
+        font-weight: bold;
+    }
+    .or-seperator {
+        margin: 20px 0 10px;
+        text-align: center;
+        border-top: 1px solid #ccc;
+    }
+    .or-seperator i {
+        padding: 0 10px;
+        background: #f7f7f7;
+        position: relative;
+        top: -11px;
+        z-index: 1;
+    }
+    .social-btn .btn {
+        margin: 10px 0;
+        font-size: 15px;
+        text-align: left;
+        line-height: 24px;
+    }
+	.social-btn .btn i {
+		float: left;
+		margin: 4px 15px  0 5px;
+        min-width: 15px;
+	}
+	.input-group-addon .fa{
+		font-size: 18px;
+	}
+</style>
 </head>
 <body>
 
   <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
 aria-hidden="true">
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="content-section">
-
-      <form class="" action="index.html" method="post" id="login_form">
-        {% csrf_token %}
-        <div class="container">
-          <input type="text" name="username" value="" id="username">
-          <label for="name">enter your username</label>
-          <input type="password" name="password" value="" id="password">
-          <label for="password">password</label>
+<div class="login-form">
+  <form class="" action="index.html" method="post" id="login_form">
+    {% csrf_token %}
+        <h2 class="text-center">Sign in</h2>
+        <div class="text-center social-btn">
+            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-primary btn-block"><i class="fa fa-facebook"></i> Sign in with <b>Facebook</b></a>
+			<a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger btn-block"><i class="fa fa-google"></i> Sign in with <b>Google</b></a>
         </div>
-        <div class="container">
-          <button type="button" name="button" id="modal-login">Submit</button>
-          <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
-          <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
-
+		<div class="or-seperator"><i>or</i></div>
+        <div class="form-group">
+        	<div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input type="text" class="form-control" name="username" placeholder="Username" required="required" id='username'>
+            </div>
         </div>
-      </form>
-    </div>
+		<div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                <input type="password" class="form-control" name="password" placeholder="Password" required="required" id='password'>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" name="button" id="modal-login" class="btn btn-success btn-block login-btn" >Sign in</button>
+        </div>
+        <div class="clearfix">
+            <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
+            <a href="#" class="pull-right text-success">Forgot Password?</a>
+        </div>
 
-  </div>
+    </form>
+    <div class="hint-text small">Don't have an account? <a href="#" class="text-success">Register Now!</a></div>
 </div>
+
 </div>
 
 
