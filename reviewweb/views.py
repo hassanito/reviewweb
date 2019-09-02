@@ -28,7 +28,6 @@ def autocompleteModel(request):
         results = []
         for r in search_qs:
             results.append(r.handle)
-            results.append(r.get_absolute_url())
         data = json.dumps(results)
     else:
         data = 'fail'
@@ -98,8 +97,9 @@ def comment(request):
             text = text
         )
         response_data['loggedin']= True
-
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
 def review_ajax(request):
     response_data={}
     if request.method =='POST':
