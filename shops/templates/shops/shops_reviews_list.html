@@ -22,7 +22,7 @@
 	<h2>No reviews on this shop yet!</h2>
 
 	{% else %}
-	<form id='review-form' method="POST">
+	<form method="POST">
 		{% csrf_token %}
 		<div class="form-group">
 			<label for="exampleFormControlTextarea1">Write your <!-- REVIEW:  --></label>
@@ -41,18 +41,17 @@
 				<input class ="star" type="radio" id="1-star" name="rating" value="1" />
 				<label for="1-star" class="star">&bigstar;</label>
 			</div>
-			<button type="submit" name="button" id="review-button">Add review</button>
+			<button type="button" name="button" id="review-button">Add review</button>
 		</div>
 		{% if user.is_authenticated %}
 		{% else %}
 				<script type="text/javascript">
 					$('#review').keyup(function(){
+						console.log("batatatitototoo");
+
 						$('#modalLoginForm').modal();
 					});
-					$('.comment-input').keyup(function(){
-						console.log("batata");
-						$('#modalLoginForm').modal();
-					});
+
 				</script>
 		{% endif %}
 
@@ -111,9 +110,14 @@
 
 
 <script type="text/javascript">
+	$('.comment-input').keyup(function(){
+		console.log("batata");
+		$('#modalLoginForm').modal();
+	});
 	$('.reviewbutton').on('click', function () {
 
 		console.log("yaaayyyy");
+		alert('boom')
 		console.log($(this).attr('id'));
 		var reviewid =$(this).attr('id');
 		var id = '#input'+$(this).attr('id');
@@ -160,7 +164,7 @@
 			}
 
 	});
-	$('#review-form').submit(function(){
+	$('#review-button').click(function(){
 		console.log('you submitted a review');
 		var csrftoken = Cookies.get('csrftoken');
 		function csrfSafeMethod(method) {

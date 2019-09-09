@@ -55,9 +55,6 @@ class ShopReviewsList(generic.ListView):
     model = Shop
     template_name ='shops/shops_reviews_list.html'
     paginate_by =2
-    def post(request, *args, **kwargs):
-        context = {}
-        return self.render_to_response(context)
     def get_context_data(self, *args, **kwargs):
         context = super(ShopReviewsList, self).get_context_data(*args, **kwargs)
         shop = get_object_or_404(Shop,pk=self.kwargs['pk'])

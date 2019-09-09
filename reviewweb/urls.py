@@ -19,7 +19,6 @@ from . import views
 
 urlpatterns = [
         path('admin/', admin.site.urls),
-        path('comment/',views.comment,name='comment'),
         path('', views.HomePage.as_view(), name="home"),
         path("test/", views.TestPage.as_view(), name="test"),
         path('thanks', views.ThanksPage.as_view(), name="thanks"),
@@ -30,6 +29,7 @@ urlpatterns = [
         path('ajax_calls/search/', views.autocompleteModel),
         path('login/',views.ajax_login),
         path('oauth/', include('social_django.urls', namespace='social')),  # <--
+        path('comment/',views.comment,name='comment'),
         path('review/',views.review_ajax,name='review_ajax'),
 
 

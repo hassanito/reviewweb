@@ -97,9 +97,8 @@ def comment(request):
             text = text
         )
         response_data['loggedin']= True
+
     return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-
 def review_ajax(request):
     response_data={}
     if request.method =='POST':
