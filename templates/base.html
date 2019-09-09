@@ -86,7 +86,7 @@ aria-hidden="true">
     {% csrf_token %}
         <h2 class="text-center">Sign in</h2>
         <div class="text-center social-btn">
-            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-primary btn-block"><i class="fa fa-facebook"></i> Sign in with <b>Facebook</b></a>
+            <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-primary btn-block"><i class="fa fa-facebook"></i> Sign in with <b>Facebook</b></a>
 			<a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-danger btn-block"><i class="fa fa-google"></i> Sign in with <b>Google</b></a>
         </div>
 		<div class="or-seperator"><i>or</i></div>

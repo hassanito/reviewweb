@@ -2,7 +2,9 @@
 {% extends "shops/shop_base.html" %}
 {% block shop_content %}
 <!-- make the ajax requests -->
+<style media="screen">
 
+</style>
 <div class="col-md-12">
 	<article class="media content-section">
 		<img class="rounded-circle article-img" src="{{ shop.image.url }}" alt="profile ">
@@ -24,8 +26,8 @@
 	{% else %}
 	<form method="POST">
 		{% csrf_token %}
-		<div class="form-group">
-			<label for="exampleFormControlTextarea1">Write your <!-- REVIEW:  --></label>
+		<div class="form-group" style='padding:10px;  border: 1px solid blue;'>
+			<label for="exampleFormControlTextarea1"> Write your review:<!-- REVIEW:  --></label>
 			<div class="container">
 				<textarea class="form-control" id="review" rows="3"></textarea>
 			</div>
@@ -43,24 +45,17 @@
 			</div>
 			<button type="button" name="button" id="review-button">Add review</button>
 		</div>
-		{% if user.is_authenticated %}
-		{% else %}
-				<script type="text/javascript">
-					$('#review').keyup(function(){
-						console.log("batatatitototoo");
 
-						$('#modalLoginForm').modal();
-					});
-
-				</script>
-		{% endif %}
 
 </form>
 		<h2>Reviews:</h2>
+
 		<ul>
+
 			{% for review in review_list %}
 						<!-- <li>{{review}} <b> rating : {{review.rating}} stars</b> by <a href="{% url 'accounts:user-profile' pk=review.reviewer.pk %}">{{review.reviewer}}</a>  </li> -->
-				<div class="col-md-12">
+
+					<div class="col-md-12">
 					<article class="media content-section">
 						<img class="rounded-circle article-img" src="{{ review.reviewer.profile.image.url }}" >
 						<div class="media-body">
@@ -69,11 +64,47 @@
 								<!-- <small class="text-muted">number of reviews : {{ shop.get_number_of_reviews }}</small> -->
 
 								<h4>Rated {{ review.rating}} stars by <a class="mr-2" href="{% url 'accounts:user-profile' pk=review.reviewer.pk %}">{{review.reviewer}}</a></h4>
-								<small>{{ review.created_at|date:"d/m/Y"  }}</small>
 							 </div>
 							 <p style="font-size:130%;" class="article-content">	{{ review }} </p>
-							 <hr>
-										{% for comment in review.comments.all %}
+							 <small>{{ review.created_at|date:"d/m/Y"  }}</small>
+
+							 <div class="actionBox">
+								 <label><strong>Comments</strong></label>
+
+									 <ul class="commentList">
+										 {% for comment in review.comments.all %}
+												 <li>
+													 <div class="commenterImage">
+														 <img  src="{{comment.author.profile.image.url }}" />
+													 </div>
+													 <strong>{{ comment.author }}</strong>
+													 <div class="commentText">
+														 <p>{{ comment.text}} </p>
+														 <span  class="date sub-text">{{ comment.created_date }}</span>
+														 {% if comment.author.id == review.reviewed_shop.shopowner_set.all.first.id %}
+														 <font color="red">[Shop owner]</font>
+														 {% endif%}
+													 </div>
+												 </li>
+										 {% endfor %}
+
+									 </ul>
+									 <form class="form-inline" role="form">
+											 <div class="form-group">
+													 <input class="form-control comment-input" id="input{{review.id}}" type="text" placeholder="Your comments" />
+											 </div>
+											 <div class="form-group">
+													 <button class="btn btn-default reviewbutton" id="{{ review.id}}" >Add</button>
+											 </div>
+									 </form>
+									 {% if review.reviewer == user %}
+										 <div>
+											 <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'shops:review-delete' review.id %}">Delete review</a>
+										 </div>
+									 {% endif %}
+
+							 </div>
+										<!-- {% for comment in review.comments.all %}
 										    <div class="comment">
 										        <div class="date">{{ comment.created_date }}</div>
 										        <strong>{{ comment.author }}</strong>
@@ -91,33 +122,42 @@
 											 <input class="comment-input" type="text" name="comment" id="input{{review.id}}">
 											 <button type="button" class="reviewbutton" id="{{ review.id}}" name="button">Submit</button>
 
-										 </form>
-							 {% if review.reviewer == user %}
+										 </form> -->
+							 <!-- {% if review.reviewer == user %}
 								 <div>
 									 <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'shops:review-delete' review.id %}">Delete</a>
 								 </div>
-							 {% endif %}
+							 {% endif %} -->
 						</div>
 					</article>
 				</div>
 			{% endfor %}
 
 		</ul>
-		<button type="button" name="button"><a href="{% url 'shops:review-shop' pk=shop.get_absolute_url %}">Write a review</a></button>
+		<!-- <button type="button" name="button"><a href="{% url 'shops:review-shop' pk=shop.get_absolute_url %}">Write a review</a></button> -->
 
 	{% endif %}
 </div>
+{% if user.is_authenticated %}
+{% else %}
+		<script type="text/javascript">
+			$('#review').keyup(function(){
+				console.log("batatatitototoo");
 
+				$('#modalLoginForm').modal();
+			});
+			$('.comment-input').keyup(function(){
+				console.log("batata");
+				$('#modalLoginForm').modal();
+			});
+		</script>
+{% endif %}
 
 <script type="text/javascript">
-	$('.comment-input').keyup(function(){
-		console.log("batata");
-		$('#modalLoginForm').modal();
-	});
+
 	$('.reviewbutton').on('click', function () {
 
 		console.log("yaaayyyy");
-		alert('boom')
 		console.log($(this).attr('id'));
 		var reviewid =$(this).attr('id');
 		var id = '#input'+$(this).attr('id');
